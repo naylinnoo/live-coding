@@ -13,6 +13,8 @@ import {
     formatCardNumber,
     formatCardExpiry,
     parseCardType,
+    parseCardExpiry,
+    validateCardExpiry,
 } from "creditcardutils"
 
 // Styled Elements
@@ -101,10 +103,19 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                     "string.cardType": `Must be either ${getValidCardsMessage()}`,
                     "any.required": "Required",
                 }),
-            card_expire: Joi.string().required().messages({
-                "string.empty": "Required",
-                "any.required": "Required",
-            }),
+            card_expire: Joi.string()
+                .custom((value, helpers) => {
+                    const { month, year } = parseCardExpiry(value)
+                    if (!validateCardExpiry(month, year)) {
+                        return helpers.error("string.cardExpired")
+                    }
+                })
+                .required()
+                .messages({
+                    "string.empty": "Required",
+                    "string.cardExpired": "This card is expired try new card",
+                    "any.required": "Required",
+                }),
             cvv: Joi.string().length(3).required().messages({
                 "string.empty": "Required",
                 "string.length": "Maximum 3 digits",
