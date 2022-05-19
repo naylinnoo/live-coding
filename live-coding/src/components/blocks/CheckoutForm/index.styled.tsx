@@ -112,6 +112,17 @@ export const ErrorMessage = styled.div`
     margin-top: 5px;
 `
 
+export const Submit = styled.button`
+    ${resetButton()}
+    background: var(--dorminant_1);
+    box-shadow: var(--product_shadow);
+    color: var(--color_base);
+    border-radius: 0.3rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.875em;
+    font-weight: 700;
+`
+
 export const Actions = styled.article`
     display: flex;
     justify-content: center;

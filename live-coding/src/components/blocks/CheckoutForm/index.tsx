@@ -33,6 +33,7 @@ import {
     InputWrapper,
     CardImageWrapper,
     CardImage,
+    Submit,
 } from "./index.styled"
 
 import Visa from "@components/svgs/visa.svg"
@@ -275,9 +276,9 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                 </FieldGroups>
 
                 <Actions>
-                    <button disabled={state.$auto_invalid || loading}>
+                    <Submit disabled={state.$auto_invalid || loading}>
                         {submitText}
-                    </button>
+                    </Submit>
                 </Actions>
             </Form>
         </Container>
