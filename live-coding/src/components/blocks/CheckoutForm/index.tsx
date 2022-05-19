@@ -30,7 +30,14 @@ import {
     Form,
     FieldGroups,
     FieldsMerge,
+    InputWrapper,
+    CardImageWrapper,
+    CardImage,
 } from "./index.styled"
+
+import Visa from "@components/svgs/visa.svg"
+import MasterCard from "@components/svgs/mastercard.svg"
+import Cvv from "@components/svgs/cvv.svg"
 
 type TypeCheckoutFormDefaultValues = {
     email: string | null
@@ -151,6 +158,9 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
         onSuccess(state.$data)
     }
 
+    const checkCard = (cardType: string) =>
+        parseCardType(models.card_number) === cardType
+
     const formatter = {
         cardNumber: (e: ChangeEvent<HTMLInputElement>) => {
             const value = formatCardNumber(e.target.value)
@@ -198,14 +208,26 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                                 Card information
                             </FieldLabel>
 
-                            <Input
-                                {...register.input({
-                                    name: "card_number",
-                                    onChange: formatter.cardNumber,
-                                })}
-                                type="text"
-                                placeholder="1234 1234 1234 1234"
-                            />
+                            <InputWrapper>
+                                <Input
+                                    {...register.input({
+                                        name: "card_number",
+                                        onChange: formatter.cardNumber,
+                                    })}
+                                    type="text"
+                                    placeholder="1234 1234 1234 1234"
+                                />
+                                <CardImageWrapper>
+                                    <CardImage
+                                        src={Visa}
+                                        isActive={checkCard("visa")}
+                                    />
+                                    <CardImage
+                                        src={MasterCard}
+                                        isActive={checkCard("mastercard")}
+                                    />
+                                </CardImageWrapper>
+                            </InputWrapper>
                         </FieldControl>
 
                         {getErrors("card_number") && (
@@ -234,11 +256,16 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                         </Fields>
 
                         <Fields>
-                            <Input
-                                {...register.input({ name: "cvv" })}
-                                type="text"
-                                placeholder="123"
-                            />
+                            <InputWrapper>
+                                <Input
+                                    {...register.input({ name: "cvv" })}
+                                    type="text"
+                                    placeholder="123"
+                                />
+                                <CardImageWrapper>
+                                    <CardImage src={Cvv} isActive={true} />
+                                </CardImageWrapper>
+                            </InputWrapper>
 
                             {getErrors("cvv") && (
                                 <ErrorMessage>{getErrors("cvv")}</ErrorMessage>

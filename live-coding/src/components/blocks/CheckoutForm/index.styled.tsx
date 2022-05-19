@@ -65,6 +65,10 @@ export const FieldLabel = styled.span`
     }}
 `
 
+export const InputWrapper = styled.div`
+    position: relative;
+`
+
 export const Input = styled.input`
     ${normalTransitions()}
     ${resetInput()}
@@ -83,6 +87,22 @@ export const Input = styled.input`
     &::placeholder {
         opacity: 0.5;
     }
+`
+export const CardImageWrapper = styled.div`
+    position: absolute;
+    display: flex;
+    top: 0;
+    right: 0;
+    margin: 0.8rem 0.5rem 0 0;
+    gap: 0.3rem;
+`
+type CardImageProps = {
+    isActive?: boolean
+}
+
+export const CardImage = styled.img`
+    width: 1.5rem;
+    opacity: ${({ isActive }: CardImageProps) => (isActive ? `1` : `0.5`)};
 `
 
 export const ErrorMessage = styled.div`
