@@ -12,6 +12,7 @@ import {
     validateCardNumber,
     formatCardNumber,
     formatCardExpiry,
+    parseCardType,
 } from "creditcardutils"
 
 // Styled Elements
@@ -50,6 +51,11 @@ const defaultState: TypeCheckoutFormDefaultValues = {
     cvv: null,
 }
 
+const validCardType = ["visa", "mastercard"]
+const getValidCardsMessage = () => {
+    return validCardType.join(", ").replace(/,(?!.*,)/gim, " or")
+}
+
 const CheckoutForm: FC<CheckoutFormProps> = ({
     onSuccess,
     loading = false,
@@ -79,13 +85,20 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                             return helpers.error("string.cardNumber")
                         }
                     }
-
                     return value
+                })
+                .custom((value, helpers) => {
+                    const type = parseCardType(value)
+                    if (validCardType.includes(type)) {
+                        return value
+                    }
+                    return helpers.error("string.cardType")
                 })
                 .required()
                 .messages({
                     "string.empty": "Required",
                     "string.cardNumber": "Must be a valid card",
+                    "string.cardType": `Must be either ${getValidCardsMessage()}`,
                     "any.required": "Required",
                 }),
             card_expire: Joi.string().required().messages({
