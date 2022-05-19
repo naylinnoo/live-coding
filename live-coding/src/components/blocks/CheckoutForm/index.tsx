@@ -15,6 +15,7 @@ import {
     parseCardType,
     parseCardExpiry,
     validateCardExpiry,
+    validateCardCVC,
 } from "creditcardutils"
 
 // Styled Elements
@@ -116,11 +117,22 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
                     "string.cardExpired": "This card is expired try new card",
                     "any.required": "Required",
                 }),
-            cvv: Joi.string().length(3).required().messages({
-                "string.empty": "Required",
-                "string.length": "Maximum 3 digits",
-                "any.required": "Required",
-            }),
+            cvv: Joi.string()
+                .regex(/^[0-9]+$/)
+                .length(3)
+                .custom((value, helpers) => {
+                    if (!validateCardCVC(value)) {
+                        return helpers.error("string.invalid")
+                    }
+                    return value
+                })
+                .required()
+                .messages({
+                    "string.empty": "Required",
+                    "string.length": "Maximum 3 digits",
+                    "any.required": "Required",
+                    "string.pattern.base": "Numbers only",
+                }),
         }),
     })
 
